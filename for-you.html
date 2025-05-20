@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Love</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      background: linear-gradient(135deg, #fff0f5, #ffd1dc);
+    }
+    
+    .intro-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      transition: opacity 1s ease;
+    }
+
+    .intro-container.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .intro-gif {
+      max-width: 300px;
+      height: auto;
+      border-radius: 10px;
+      animation: heartbeat 1.5s infinite;
+    }
+
+    .next-button {
+      padding:  0.75rem 1.5rem;
+      font-size: 1.5em;
+      color: #fff;
+      background-color: #d81b60;
+      border-radius: 9999px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .next-button:hover {
+      background-color: #c2185b;
+      transform: scale(1.2);
+    }
+    .next-button .bounce {
+      animation: bounce 1s infinite ease-in-out;
+    }
+    .yes-button {
+      padding:  0.75rem 1.5rem;
+      font-size: 1.5em;
+      color: #fff;
+      background-color: #d81b60;
+      border-radius: 9999px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .yes-button:hover {
+      background-color: #c2185b;
+      transform: scale(1.2);
+    }
+    .next-button .bounce {
+      animation: bounce 1s infinite ease-in-out;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    .memory-section {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      flex-direction: center;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      transition: opacity 1s ease;
+      text-align: center;
+    }
+
+    .memory-section.active {
+      display: flex;
+    }
+
+    .memory-text {
+      color: #fff;
+      font-size: 1.8em;
+      font-family: 'Georgia', serif;
+      margin-bottom: 20px;
+    }
+
+    .memory-image {
+      max-width: 300px;
+      height: 300px;
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .memory-image.visible {
+      opacity: 1;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .section {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      cursor: pointer;
+    }
+
+    .section.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    h2 {
+      color: #d81b60;
+      font-family: 'Georgia', serif;
+      font-size: 1.8em;
+    }
+
+    h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2em;
+    color: #e52767;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px #ffc1d6;
+
+    }
+
+    p {
+      font-size: 1.1em;
+      line-height: 1.5;
+    }
+
+    .heart {
+      color: #d81b60;
+      font-size: 1.2em;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      background-color: #f06292;
+      color: white;
+      border-radius: 9999px;
+      font-size: 1.5rem;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #ec407a;
+    }
+    .bounce {
+      animation: bounce 1s infinite ease-in-out;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    @media (max-width: 600px) {
+      .intro-gif, .memory-image {
+        max-width: 200px;
+      }
+
+      .next-button {
+        font-size: 2em;
+        padding: 10px 20px;
+      }
+
+      .yes-button {
+        font-size: 2em;
+        padding: 10px 20px;
+      }
+
+      .memory-text {
+        font-size: 1.5em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+      
+      p {
+        font-size: 1em;
+      }
+
+      .container .mem-img {
+        margin: 20px;
+        max-width: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div class="intro-container" id="introContainer">
+    <h1>Welcome Kanxuu ❤️</h1>
+    <img src="hello.gif" alt="Intro GIF" class="intro-gif">
+    <button class="btn bounce" onclick="showMemory()">Let's Begin</button>
+  </div>
+  <div class="memory-section" id="memorySection" onclick="showFirstSection()">
+    <div>
+      <p class="memory-text" id="memoryText"></p>
+      <img src="first.jpg" alt="Memory image" class="memory-image" id="memoryImage">
+      <button class="next-button bounce" onclick="showMemory()">Next</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="section" id="section1" >
+      <h2>Our Beautiful Beginning <span class="heart">♥</span></h2>
+      <img src="excited.gif"> 
+      <p>Remember how excited we used to be maya? Your smile lit up my world, and every moment with you felt like a dream. Our love is the bestest part of my life maya. Click to unfold our journey.</p>
+      <img src="mem.jpg" alt="Our first moment" class="mem-img">
+      <button class="next-button bounce" onclick="revealNextSection(1)">Next</button>
+    </div>
+    <div class="section" id="section2">
+      <h2>Our Shared Memories <span class="heart">♥</span></h2>
+      <img src="adorable.gif">
+      <p>From late-night talks to our silly adventures, every memory with you is a treasure. Can we make more?</p>
+      <img src="us.jpg" alt="Shared memories">
+      <button class="next-button bounce" onclick="revealNextSection(2)">Next</button>
+    </div>
+    <div class="section" id="section3" >
+      <h2>Us Together <span class="heart">♥</span></h2>
+      <img src="miss-you.gif">
+      <p>I believe in us maya. We survived through thick and thin. I am sure we can always be by each other's side and be happy if we try and understand each other babe.</p>
+      <img src="babe.jpg" alt="Us">
+      <button class="next-button bounce" onclick="revealNextSection(3)">Next</button>
+    </div>
+    <div class="section" id="section4">
+      <h2>Life Long Chapter<span class="heart">♥</span></h2>
+      <img src="pro.gif" width="200px">
+      <p>Let's be together maya. Will you be mine forever saana?</p>
+      <img src="pro.jpg" alt="New beginning" width="500px" >
+      <button class="yes-button bounce" onclick="revealNextSection(4)">Yes</button>
+    </div>
+    <div class="section" id="section5">
+      <h2>Congratulations<span class="heart">♥</span></h2>
+      <img src="kiss.gif" width="200px">
+      <p>Our hearts are united again, ready for a new journey filled with love and devotion. Here’s to us!</p>
+      <img src="for.jpg" alt="New beginning">
+    </div>
+  </div>
+
+
+
+  <script>
+    class Engine {
+      constructor(physics, renderer, objects = []) {
+        this.physics = physics;
+        this.renderer = renderer;
+        this.objects = objects;
+      }
+      add(...objects) {
+        this.objects = this.objects.concat(objects);
+      }
+      tick() {
+        this.physics.update(this.objects);
+      }
+      render() {
+        this.renderer.render(this.objects);
+      }
+      clear() {
+        this.renderer.clear();
+      }
+    }
+
+    class Physics {
+      update(objects) {
+        objects.forEach(obj => {
+          obj.y += obj.vy;
+          obj.x += obj.vx;
+          if (obj.y > window.innerHeight + 50) {
+            obj.y = -50;
+            obj.x = Math.random() * window.innerWidth;
+            obj.vx = (Math.random() - 0.5) * 2;
+          }
+        });
+      }
+    }
+
+    class Renderer {
+      constructor(ctx) {
+        this.ctx = ctx;
+      }
+      clear() {
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+      }
+      render(objects) {
+        this.clear();
+        objects.forEach(obj => {
+          this.ctx.fillStyle = '#d81b60';
+          this.ctx.font = `${obj.size}px Arial`;
+          this.ctx.fillText('♥', obj.x, obj.y);
+        });
+      }
+    }
+
+    // Canvas setup
+    const canvas = document.getElementById('canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+
+    // Initialize heart objects
+    const hearts = Array(20).fill().map(() => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 2,
+      vy: Math.random() * 2 + 1,
+      size: Math.random() * 20 + 10
+    }));
+
+    // Initialize engine
+    const physics = new Physics();
+    const renderer = new Renderer(ctx);
+    const engine = new Engine(physics, renderer, hearts);
+
+    // Animation loop
+    function animate() {
+      engine.tick();
+      engine.render();
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Intro GIF, button, memory section, and section reveal logic
+    function showMemory() {
+      const introContainer = document.getElementById('introContainer');
+      introContainer.classList.add('hidden');
+      setTimeout(() => {
+        introContainer.style.display = 'none';
+        const memorySection = document.getElementById('memorySection');
+        memorySection.classList.add('active');
+        
+        // Typewriter effect for "Remember this babe"
+        const memoryText = document.getElementById('memoryText');
+        const text = "Remember Maya? 🥺";
+        let index = 0;
+    
+        function type() {
+          if (index < text.length) {
+            memoryText.textContent += text.charAt(index);
+            index++;
+            setTimeout(type, 100); // Adjust speed (100ms per character)
+          } else {
+            // Show the image after typing is complete
+            const memoryImage = document.getElementById('memoryImage');
+            memoryImage.classList.add('visible');
+          }
+        }
+        
+        type();
+      }, 1000);
+    }
+
+    function showFirstSection() {
+      const memorySection = document.getElementById('memorySection');
+      memorySection.classList.add('hidden');
+      setTimeout(() => {
+        memorySection.style.display = 'none';
+        document.getElementById('section1').classList.add('active');
+      }, 1000);
+    }
+
+    function revealNextSection(currentIndex) {
+      const nextSection = document.getElementById(`section${currentIndex + 1}`);
+      if (nextSection) {
+        nextSection.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
